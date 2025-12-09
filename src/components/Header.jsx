@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 
 const links = [
   { to: "/", label: "Inicio" },
@@ -12,6 +13,7 @@ const links = [
 
 function Header({ menuOpen, setMenuOpen }) {
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -63,6 +65,23 @@ function Header({ menuOpen, setMenuOpen }) {
               </NavLink>
             </li>
           ))}
+          <li className="auth-chip">
+            {user ? (
+              <div className="auth-chip__inner">
+                <span>{user.name}</span>
+                <button type="button" onClick={logout}>
+                  Salir
+                </button>
+              </div>
+            ) : (
+              <NavLink
+                to="/login"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                Ingresar
+              </NavLink>
+            )}
+          </li>
           <li className="theme-toggle-wrapper">
             <button
               className="theme-toggle"
